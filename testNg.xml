@@ -5,6 +5,8 @@
     <test name="login function">
         <classes>
           <class name="tests.TestLogin"/>
+            <class name="tests.TestHome"/>
+
         </classes>
     </test>
 </suite>

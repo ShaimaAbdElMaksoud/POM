@@ -1,12 +1,16 @@
 package pages;
 
+import bot.ActionBot;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
 public class LoginScreen {
 
     // variable
-    WebDriver driver;
+    private WebDriver driver;
+    private ActionBot actionBot;
+
 
     private final By userName=By.id("user-name");
     private final By password=By.id("password");
@@ -14,21 +18,25 @@ public class LoginScreen {
     private final By errorMessage=By.xpath("//div[@class='error-message-container error']");
 
     // constractor
-
     public LoginScreen(WebDriver driver){
-      this.driver=driver;
+        this.driver=driver;
+        actionBot= new ActionBot(driver);
     }
-
 
     // actions (methods)
-    public void login(String user, String pass){
-        driver.findElement(userName).sendKeys(user);
-        driver.findElement(password).sendKeys(pass);
-        driver.findElement(loginButton).click();
+    public HomeScreen login(String user, String pass){
+        actionBot.sendKey(userName,user );
+        actionBot.sendKey(password,pass );
+        actionBot.click(loginButton);
+        return new HomeScreen(driver);
     }
 
-    public boolean errorMessageIsDisplayed(){
-      return  driver.findElement(errorMessage).isDisplayed();  // true
+
+    public LoginScreen errorMessageIsDisplayed(){
+        Assert.assertTrue(
+          driver.findElement(errorMessage).isDisplayed());
+        return this;
 
     }
+
 }

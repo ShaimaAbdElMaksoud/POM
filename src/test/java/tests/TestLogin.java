@@ -1,5 +1,6 @@
 package tests;
 
+import drivers.WebDriverFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -18,41 +19,38 @@ public class TestLogin {
 
     //variables
     WebDriver driver;
-    LoginScreen loginScreen;
-
     // method
-    @Test
+    @Test(priority = 0)
     @Description("Validate that user can login Successfully with valid user name and password")
     @Tag("Happy SC")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Login")
     public void loginSuccessfully(){
-        loginScreen.login("standard_user", "secret_sauce");
+        new LoginScreen(driver)
+                .login("standard_user", "secret_sauce");
     }
 
 
     @Description("Validate that user errpr message will be displayed in cases user locked")
-    @Test
+     @Test(priority = 1)
     @Tag("Negative SC")
     @Severity(SeverityLevel.MINOR)
     @Story("Login")
     public void loginWithLockedAccount(){
-
-        loginScreen.login("locked_out_user", "secret_sauce");
-        Assert.assertTrue(loginScreen.errorMessageIsDisplayed(), "the error not displayed");
+        new LoginScreen(driver)
+                .login("locked_out_user", "secret_sauce");
+        new LoginScreen(driver).errorMessageIsDisplayed();
     }
     // config
 
     @BeforeMethod
     public void setup(){
-        driver= new ChromeDriver();
-        loginScreen= new LoginScreen(driver);
-        driver.manage().window().maximize();
+     driver= WebDriverFactory.initDriver("edge");
         driver.get("https://www.saucedemo.com/");
     }
 
     @AfterMethod
     public void close(){
-        driver.quit();
+        WebDriverFactory.quitDriver();
     }
 }
